@@ -1,0 +1,143 @@
+fl/*
+HW #4
+Programmer: Chase Gould
+Date: 3/11/16
+Version: 1.0
+Description: Program prompts user to input their mobile package, minutes used and month
+in order to calculate their monthly payment due and output possible savings by upgrading packages.
+*/
+
+#include <iostream>
+#include <string>
+#include <iomanip>
+using namespace std;
+
+int main()
+{
+    //variables to store user input data.
+    int package;
+    string month;
+    float minutes;
+
+
+    cout << "In order to calculate your monthly bill please select from the following menu.\n"
+         << "Enter 1: for package A\n"
+         << "Enter 2: for package B\n"
+         << "Enter 3: for package C\n";
+    cin >> package;
+
+    //input validation for package options
+    if (package <= 3 && package >= 1) {
+        cout << "What is the total number of minutes you used for the billing month.\n";
+        cin >> minutes;
+
+        //input validation minutes entered must be greater than or equal to zero.
+        while (minutes < 0) {
+            cout << "Please enter a number of minutes greater than or equal to zero.\n";
+            cin >> minutes;
+        }
+
+        cout << "What month will be calculated(enter name of month)\n";
+        cin >> month;
+
+        float hours = minutes/60;//necessary for monthly hours
+
+        //input validation month entered must be spelled correctly.
+        if (month == "January" || month == "january" || month == "March" || month == "march" || month == "May" ||
+            month == "may" || month == "July" || month == "july" || month == "August" || month == "august" ||
+            month == "October" || month == "october" || month == "December" || month == "december") {
+            //minutes entered cannot exceed total minutes in the given month
+            while (hours > 744) {
+                cout << "There aren't that many minutes in " << month << " enter minutes again.\n"
+                << "minutes: ";
+                cin >> minutes;
+                hours = minutes/60;
+
+            }
+        }
+        //input validation month entered must be spelled correctly.
+        else if (month == "February" || month == "february") {
+            //minutes entered cannot exceed total minutes in the given month
+            while (hours > 672) {
+                cout << "There aren't that many minutes in " << month << " enter minutes again.\n"
+                << "minutes: ";
+                cin >> minutes;
+                hours = minutes/60;
+
+            }
+        }
+        //input validation month entered must be spelled correctly.
+        else if (month == "April" || month == "april" || month == "June" || month == "june" ||
+                 month == "September" || month == "september" || month == "November" || month == "november") {
+            //minutes entered cannot exceed total minutes in the given month
+             while (hours > 720) {
+                cout << "There aren't that many minutes in " << month << " enter minutes again.\n"
+                << "minutes: ";
+                cin >> minutes;
+                hours = minutes/60;
+
+            }
+        }
+
+        else { //if user does not input a valid month the program will end
+                cout << "Invalid month input. please restart the program\n";
+                return 0;
+        }
+
+            //variables used to calculate monthly payment
+            float monthlyChargeA = 39.99, monthlyChargeB = 59.99, monthlyChargeC = 69.99,
+            maxMinsA = 450, maxMinsB = 900,
+            minsOverA = minutes - maxMinsA, minsOverB = minutes - maxMinsB, // variable used to calculate if client went over on their minutes
+            excessChargeA = .45, excessChargeB = .4;
+
+            //if the client did not go over on minutes value for minsOver is set to 0
+            if (minsOverA < 0)
+                minsOverA = 0;
+            if (minsOverB < 0)
+                minsOverB = 0;
+
+            //variables store formulas to calculate monthly payment due.
+            float calculatePaymentA = monthlyChargeA + ((minsOverA) *excessChargeA),
+            calculatePaymentB = monthlyChargeB + ((minsOverB) *excessChargeB),
+
+            //variable store formulas to calculate possible savings by upgrading package.
+            upgradeA2B = calculatePaymentA - calculatePaymentB,
+            upgradeA2C = calculatePaymentA - monthlyChargeC,
+            upgradeB2C = calculatePaymentB - monthlyChargeC;
+
+            /*switch statement used to display monthly payment due, and possible savings by
+            upgrading packages, according to package selected and minutes used
+            */
+            switch (package)    {
+                case 1:{
+                    cout << "Your amount due is $" << setprecision(2) << fixed << calculatePaymentA << "\n";
+
+                    if (upgradeA2B > 0)
+                    cout << "If you upgrade to package B you will save: $" << upgradeA2B << "\n";
+
+                     if (upgradeA2C > 0)
+                    cout << "If you upgrade to package C you will save: $" << upgradeA2C << "\n";
+                        break;
+                }
+                case 2: {
+                     cout << "Your amount due is $" << calculatePaymentB << "\n";
+
+                     if (upgradeB2C > 0)
+                    cout << "If you upgrade to package C you will save: $" << upgradeB2C << "\n";
+                        break;
+                }
+
+                case 3: {
+                    cout << "Your amount due is $"  << monthlyChargeC;
+                        break;
+                }
+
+            } //end of switch
+
+        } // end of if statement
+
+    else
+        cout << "Restart program and enter a number between 1 and 3.";
+
+    return 0;
+}
